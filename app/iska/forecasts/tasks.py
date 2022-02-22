@@ -15,11 +15,9 @@ logger = get_task_logger(__name__)
 
 @shared_task(bind=True)
 def upload_forecasts_csv(self, data, retry):
-    print("upload_forecasts_csv", retry)
     logger.info("upload_forecasts_csv {}".format(retry))
 
     key = self.request.id
-    print(key)
     timeout = settings.TASK_TIMEOUT
     if retry != 0:
         cache.set(key, states.REVOKED, timeout=timeout)

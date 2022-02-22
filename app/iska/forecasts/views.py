@@ -44,4 +44,4 @@ class ForecastViewSet(viewsets.ModelViewSet):
     def task_status(self, request):
         task_id = request.data.get("task_id")
         task_status = cache.get(task_id) or "EXPIRED"
-        return Response({"task_id": task_status}, status=status.HTTP_200_OK)
+        return Response({"task_status": task_status, "task_id": task_id}, status=status.HTTP_200_OK)

@@ -9,12 +9,28 @@
 Configure .env 
 
 **BILLING_TOKEN** : Billing service token
+
 **BILLING_URL** : Billing service url
+
 **MAX_BILLING_TRY_LIMIT** : Billing service retry count per subscription
+
 **MAX_TASK_RETRY**  : CSV upload tasks retry count
+
 **MAX_SMS_TRY_LIMIT** : SMS service retry count per subscription
+
 **TASK_TIMEOUT**  : Task log timeout from cache
-**SELF_CALLBACK** : Self asynchronous callback function for test purposes. When True SMS statuses will be updated to delivered from accepted by an asynchronous function after SMS service returned status accepted on reponse.
+
+**SELF_CALLBACK** : Self asynchronous callback function for test purposes. When True SMS statuses will be updated to delivered from accepted by an asynchronous function after SMS service returned status accepted on reponse. However this is not working with docker build. You can simply trigger it like shown below:
+
+
+```
+curl --location --request POST 'http://localhost:8000/subscriptions/api/v1/subscriptions/callback/' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "msgid": subscription_msgid,
+    "status": "delivered"
+}'
+```
 
 ## Build with Docker-Compose
 
@@ -24,6 +40,10 @@ Configure .env
 ```
 
 ## Run locally
+
+PostgreSQL and postgis extensions should be pre-installed:
+https://docs.djangoproject.com/en/4.0/ref/contrib/gis/install/postgis/#installing-postgis
+
 
 Create virtual environment and install dependencies
 
@@ -48,12 +68,6 @@ Run app
   python manage.py runserver
 ```
 
-Run tests
-
-```bash
-  python manage.py test
-```
-
 ## Tech
 
 **App:** Python3.8, Django, Django-REST, PosgreSQL, Postgis
@@ -63,7 +77,8 @@ Run tests
 ## Usage
  
 **Forecasts CRUD**  : http://localhost:8000/forecasts/api/v1/forecasts
-**Subscriptions CRUD**  : http://localhost:8000/subscription/api/v1/subscription
+
+**Subscriptions CRUD**  : http://localhost:8000/subscriptions/api/v1/subscriptions
 
 #### Upload forecasts with csv
 
@@ -180,7 +195,7 @@ curl --location --request GET 'http://localhost:8000/subscriptions/api/v1/subscr
 
 | Status  | Definition	|
 | ------------- |:-------------:|
-|	PENDING	|	Task not startede yet 	|
+|	PENDING	|	Task not started yet 	|
 |	STARTED	|	Task on running	|
 | 	SUCCESS	|	Task successfully completed	|
 | 	FAILURE	|	Task failed	|
