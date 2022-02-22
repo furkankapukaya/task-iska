@@ -1,0 +1,9 @@
+requests
+Django==4.0.2
+djangorestframework==3.13.1
+psycopg2-binary==2.9.2
+gunicorn==19.9.0
+geopy
+redis
+python-dotenv
+celery
